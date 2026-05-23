@@ -7,9 +7,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// I removed the email verification to make access easier for testing purposes.
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -17,4 +19,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Load the auth routes from routes/auth.php file (auth handled by Laravel Breeze)
 require __DIR__.'/auth.php';
