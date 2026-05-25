@@ -51,10 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+
+    // One-To-Many relationship with the Project Table
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
     }
 
-    
 }
