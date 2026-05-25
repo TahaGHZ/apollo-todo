@@ -19,9 +19,23 @@ class ProjectController extends Controller
             ->latest()
             ->get();
 
-        return view('projects.index', [
-            'projects' => $projects,
-        ]);
+        $projectsCount = $projects->count();
+        $totalTasksCount = $projects->sum('tasks_count');
+        
+        $completedTasksCount = 0;
+        $highPriorityTasksCount = 0;
+        foreach ($projects as $project) {
+            $completedTasksCount += $project->tasks->where('status', 'done')->count();
+            $highPriorityTasksCount += $project->tasks->where('priority', 'high')->count();
+        }
+
+        return view('projects.index', compact(
+            'projects',
+            'projectsCount',
+            'totalTasksCount',
+            'completedTasksCount',
+            'highPriorityTasksCount'
+        ));
     }
 
     // redirect to the project creation form
