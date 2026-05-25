@@ -1,51 +1,42 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Project
+            {{ __('Create Project') }}
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <form method="POST" action="{{ route('projects.store') }}" class="bg-white p-6 shadow rounded">
-                @csrf
+    <div class="page-shell">
+        <div class="section-card" style="max-width: 680px; margin: 0 auto;">
+            <div class="section-header">
+                <h2 class="section-title">Create Project</h2>
+                <p class="section-subtitle">Create a new project to start organizing tasks.</p>
+            </div>
+            <div class="section-padding">
+                <form method="POST" action="{{ route('projects.store') }}" class="form-stack">
+                    @csrf
 
-                <div class="mb-4">
-                    <label for="name" class="block font-medium">Name</label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        value="{{ old('name') }}"
-                        class="border rounded w-full"
-                    >
+                    <div class="form-group">
+                        <label class="label" for="name">Name</label>
+                        <input id="name" name="name" class="input" placeholder="Example: Internship Assignment" value="{{ old('name') }}" required>
+                        @error('name')
+                            <p style="color: var(--danger); font-size: 13px; margin: 0;">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                    @error('name')
-                        <p class="text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                    <div class="form-group">
+                        <label class="label" for="description">Description</label>
+                        <textarea id="description" name="description" class="textarea" placeholder="Short project description">{{ old('description') }}</textarea>
+                        @error('description')
+                            <p style="color: var(--danger); font-size: 13px; margin: 0;">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="mb-4">
-                    <label for="description" class="block font-medium">Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        class="border rounded w-full"
-                    >{{ old('description') }}</textarea>
-
-                    @error('description')
-                        <p class="text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <button type="submit" class="text-blue-600 underline">
-                    Save Project
-                </button>
-
-                <a href="{{ route('projects.index') }}" class="ml-4 text-gray-600 underline">
-                    Cancel
-                </a>
-            </form>
+                    <div class="btn-row">
+                        <button type="submit" class="btn btn-primary">Create Project</button>
+                        <a href="{{ route('projects.index') }}" class="btn btn-secondary">Back</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </x-app-layout>

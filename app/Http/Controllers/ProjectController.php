@@ -7,16 +7,35 @@ class ProjectController extends Controller
 {
     
     // Displays a listing of projects for the associated authed user.
+    //fetch all projects of the user and the associated tasks (from newest to oldest)
     public function index()
     {
         $projects = auth()->user()
             ->projects()
+            ->withCount('tasks')
+            ->with(['tasks' => function ($query) {
+                $query->latest();
+            }])
             ->latest()
             ->get();
 
-        return view('projects.index', [
-            'projects' => $projects,
-        ]);
+        $projectsCount = $projects->count();
+        $totalTasksCount = $projects->sum('tasks_count');
+        
+        $completedTasksCount = 0;
+        $highPriorityTasksCount = 0;
+        foreach ($projects as $project) {
+            $completedTasksCount += $project->tasks->where('status', 'done')->count();
+            $highPriorityTasksCount += $project->tasks->where('priority', 'high')->count();
+        }
+
+        return view('projects.index', compact(
+            'projects',
+            'projectsCount',
+            'totalTasksCount',
+            'completedTasksCount',
+            'highPriorityTasksCount'
+        ));
     }
 
     // redirect to the project creation form
@@ -86,7 +105,7 @@ class ProjectController extends Controller
         $project->update($validated);
 
         return redirect()
-            ->route('projects.show', $project)
+            ->route('projects.index')
             ->with('success', 'Project updated successfully.');
     }
 

@@ -25,7 +25,7 @@ class TaskController extends Controller
         $project->tasks()->create($validated);
 
         return redirect()
-            ->route('projects.show', $project)
+            ->route('projects.index')
             ->with('success', 'Task created successfully.');
     }
 
@@ -70,7 +70,7 @@ class TaskController extends Controller
         $task->update($validated);
 
         return redirect()
-            ->route('projects.show', $project)
+            ->route('projects.index')
             ->with('success', 'Task updated successfully.');
     }
 
@@ -89,7 +89,7 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()
-            ->route('projects.show', $project)
+            ->route('projects.index')
             ->with('success', 'Task deleted successfully.');
     }
 }
