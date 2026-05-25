@@ -7,10 +7,15 @@ class ProjectController extends Controller
 {
     
     // Displays a listing of projects for the associated authed user.
+    //fetch all projects of the user and the associated tasks (from newest to oldest)
     public function index()
     {
         $projects = auth()->user()
             ->projects()
+            ->withCount('tasks')
+            ->with(['tasks' => function ($query) {
+                $query->latest();
+            }])
             ->latest()
             ->get();
 
