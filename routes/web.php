@@ -4,7 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 // import projects controller
 use App\Http\Controllers\ProjectController;
-
+//import tasks controlelr
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,10 @@ Route::middleware('auth')->group(function () {
 
     //projects routes
     Route::resource('projects', ProjectController::class);
+    //tasks routes
+    Route::resource('projects.tasks', TaskController::class)
+        ->except(['index', 'create', 'show']);
+
 });
 
 // Load the auth routes from routes/auth.php file (auth handled by Laravel Breeze)
