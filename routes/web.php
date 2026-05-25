@@ -8,14 +8,17 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('projects.index');
+    }
+
     return view('welcome');
 });
 
 // I removed the email verification to make access easier for testing purposes.
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect()->route('projects.index');
 })->middleware(['auth'])->name('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
