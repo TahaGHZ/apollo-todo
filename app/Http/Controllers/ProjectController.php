@@ -41,10 +41,14 @@ class ProjectController extends Controller
     }
 
     // selected project details page (view)
+    // now queries the tasks associated to the project : from newest to oldest
     public function show(string $id)
     {
         $project = auth()->user()
             ->projects()
+            ->with(['tasks' => function ($query) {
+                $query->latest();
+            }])
             ->where('id', $id)
             ->firstOrFail();
 
